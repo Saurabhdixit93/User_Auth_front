@@ -8,7 +8,6 @@ const cors = require("cors");
 const passport = require("passport");
 const passportLocal = require("passport-local");
 const passportLocalConfig = require("./Configration/Passport-local");
-const LocalStrategy = passportLocal.Strategy;
 const Routes = require("./Routes/index");
 const { ConnectDb } = require("./Configration/Database");
 

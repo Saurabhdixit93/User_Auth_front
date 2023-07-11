@@ -52,12 +52,12 @@ passport.checkAuthentication = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  return res.redirect("/user/signin");
+  return res.send({ status: false, message: "Login First To Access" });
 };
 
 passport.setAuthenticatedUser = (req, res, next) => {
   if (req.isAuthenticated()) {
-    res.locals.user = req.user;
+    return res.locals.user = req.user;
   }
   next();
 };
