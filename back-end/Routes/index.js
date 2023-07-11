@@ -6,9 +6,9 @@ const passport = require("passport");
 router.get("/", (req, res) => {
   return res.send("Success");
 });
-router.get('/page',passport.checkAuthentication ,(req,res) => {
-  return res.send({status: true,message:'Protected Rout Accessed'});
-})
+router.get("/page", passport.checkAuthentication, (req, res) => {
+  return res.send({ status: true, message: "Protected Rout Accessed" });
+});
 
 router.use("/user", UserRoutes);
 
