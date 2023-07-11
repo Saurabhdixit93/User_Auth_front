@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { CreteAccount } = require("../Controllers/UserControllers");
+const {
+  CreteAccount,
+  UserLoginJWT,
+} = require("../Controllers/UserControllers");
 const passport = require("passport");
 router.post("/signup", CreteAccount);
 
@@ -33,5 +36,7 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+
+router.post("/api/login", UserLoginJWT);
 
 module.exports = router;

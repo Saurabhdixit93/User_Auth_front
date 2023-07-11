@@ -1,5 +1,8 @@
 const bcryptjs = require("bcryptjs");
 const UserModel = require("../Models/UserModel");
+const jwt = require("jsonwebtoken");
+const { expiresIn } = require("../Configration/Jwt_Auth");
+const secretKey = process.env.SECRETE_KEY;
 
 module.exports.CreteAccount = async (req, res) => {
   const { userName, userEmail, userPassword, confirmPassword } = req.body;
@@ -55,5 +58,49 @@ module.exports.CreteAccount = async (req, res) => {
     });
   } catch (error) {
     return res.send({ status: false, messaage: "Internal Server Error" });
+  }
+};
+
+module.exports.UserLoginJWT = async (req, res) => {
+  // Extract email and password from request body
+  const { userEmail, userPassword } = req.body;
+  // Convert email to lowercase for case-insensitive comparison
+  const validEmail = userEmail.toLowerCase();
+
+  try {
+    // Check if the user exists
+    const userExists = await UserModel.findOne({ userEmail: validEmail });
+    if (!userExists) {
+      return res.send({
+        status: false,
+        message:
+          "User Email Not Found or User Does Not Exist,Please Create New Account",
+      });
+    }
+    // Verify the password
+    const passwordMatch = await bcryptjs.compare(
+      userPassword,
+      userExists.userPassword
+    );
+    if (!passwordMatch) {
+      return res.send({
+        status: false,
+        message: "Incorrect Password Try Again !",
+      });
+    }
+
+    // Create a token for authentication with expires Time
+    const token = jwt.sign({ id: userExists._id }, secretKey, { expiresIn });
+    return res.send({
+      status: true,
+      message: "Login Successful, please use this token",
+      token: token,
+    });
+  } catch (error) {
+    // Return a 500 status (Internal Server Error) if an error occurs
+    return res.send({
+      status: false,
+      message: `Error In Login User Account: ${error.message}`,
+    });
   }
 };
