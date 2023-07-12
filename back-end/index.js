@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const cookiParser = require("cookie-parser");
 const dotenv = require("dotenv");
 dotenv.config();
 const cors = require("cors");
@@ -14,7 +15,18 @@ const { ConnectDb } = require("./Configration/Database");
 const PORT = process.env.PORT;
 const app = express();
 // middleWares
+app.use(cookiParser());
 app.use(express.json());
+// Add CORS headers middleware
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 

@@ -1,11 +1,24 @@
 import React, { useState } from "react";
-import { FaUser, FaLock } from "react-icons/fa";
-
+import {
+  FaUser,
+  FaEye,
+  FaEyeSlash,
+  FaLock,
+  FaEnvelopeOpenText,
+} from "react-icons/fa";
+import axios from "axios";
+import {
+  showNotificationForRegisterError,
+  showNotificationForRegisterSuccess,
+} from "../../Notification/Notify";
+const signupUrl = process.env.REACT_APP_SIGNUP_API;
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
-    password: "",
+    userEmail: "",
+    userPassword: "",
+    confirmPassword: "",
   });
 
   const handleInputChange = (event) => {
@@ -20,12 +33,27 @@ const SignupPage = () => {
     setShowPassword((prevState) => !prevState);
   };
 
+  const HandleRegister = async (e) => {
+    e.preventDefault();
+    await axios
+      .post(signupUrl, formData)
+      .then((result) => {
+        if (result.data.status === true) {
+          showNotificationForRegisterSuccess(result.data.message);
+        } else {
+          showNotificationForRegisterError(result.data.message);
+        }
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  };
   return (
     <>
       <div id="SignUp-Page">
         <div className="signup-form">
           <h2>Create an Account</h2>
-          <form>
+          <form onSubmit={HandleRegister}>
             <div className="form-group">
               <label htmlFor="username">
                 <FaUser /> Username
@@ -39,16 +67,46 @@ const SignupPage = () => {
                 required
               />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="userEmail">
+                <FaEnvelopeOpenText /> Email
+              </label>
+              <input
+                type="text"
+                id="userEmail"
+                name="userEmail"
+                value={formData.userEmail}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
             <div className="form-group">
               <label htmlFor="password">
                 <FaLock /> Password
               </label>
               <div className="password-input">
                 <input
-                  type={showPassword ? "text" : "password"}
+                  type={"password"}
                   id="password"
-                  name="password"
-                  value={formData.password}
+                  name="userPassword"
+                  value={formData.userPassword}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="confirmPassword">
+                <FaLock /> Re-Password
+              </label>
+              <div className="password-input">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
                   onChange={handleInputChange}
                   required
                 />
@@ -56,7 +114,7 @@ const SignupPage = () => {
                   className={`password-toggle ${showPassword ? "show" : ""}`}
                   onClick={handleTogglePassword}
                 >
-                  {showPassword ? "Hide" : "Show"}
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </span>
               </div>
             </div>

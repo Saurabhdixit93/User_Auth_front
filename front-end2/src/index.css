@@ -79,8 +79,8 @@
     opacity: 0.6
   }
 }
-                    
-.navigation > li {
+
+.navigation>li {
   display: flex;
   position: relative;
   padding: 0px;
@@ -90,13 +90,13 @@
   transition: all 0.2s;
 }
 
-.navigation > li:hover {
-    color: #FF9950;
+.navigation>li:hover {
+  color: #FF9950;
 }
 
 
 
-.navigation > li::after {
+.navigation>li::after {
   content: '';
   position: absolute;
   width: 100%;
@@ -105,16 +105,17 @@
   bottom: -4px;
   border-radius: 1px;
   left: 0;
-  background: linear-gradient(90deg,var(--background), var(--primary), var(--background));
+  background: linear-gradient(90deg, var(--background), var(--primary), var(--background));
   transform-origin: bottom center;
   transition: transform 0.3s ease-out;
 }
 
-.navigation > li:hover::after {
+.navigation>li:hover::after {
   transform: scaleX(1);
   transform-origin: bottom center;
-}                    
-.navigation > li {
+}
+
+.navigation>li {
   display: flex;
   position: relative;
   padding: 0px;
@@ -124,13 +125,13 @@
   transition: all 0.2s;
 }
 
-.navigation > li:hover {
-    color: #FF9950;
+.navigation>li:hover {
+  color: #FF9950;
 }
 
 
 
-.navigation > li::after {
+.navigation>li::after {
   content: '';
   position: absolute;
   width: 100%;
@@ -139,15 +140,16 @@
   bottom: -4px;
   border-radius: 1px;
   left: 0;
-  background: linear-gradient(90deg,var(--background), var(--primary), var(--background));
+  background: linear-gradient(90deg, var(--background), var(--primary), var(--background));
   transform-origin: bottom center;
   transition: transform 0.3s ease-out;
 }
 
-.navigation > li:hover::after {
+.navigation>li:hover::after {
   transform: scaleX(1);
   transform-origin: bottom center;
 }
+
 @media (min-width: 600px) {
   .menu-icon {
     display: none;
@@ -271,10 +273,13 @@
   }
 }
 
-#SignUp-Page{
+#SignUp-Page {
+  margin-top: 100px;
   min-height: 70vh;
 }
+
 .signup-form {
+
   max-width: 400px;
   margin: 0 auto;
   padding: 20px;

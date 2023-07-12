@@ -1,8 +1,8 @@
-const { secretKey } = process.env.SECRETE_KEY;
+const secretKey = process.env.SECRETE_KEY;
 const jwt = require("jsonwebtoken");
 
 // verify JWT TOKEN function
-module.exports.VERIFY = async (req, res, next) => {
+module.exports.VERIFYJWT = async (req, res, next) => {
   try {
     // Check if Authorization header exists
     if (!req.headers.authorization) {
@@ -20,6 +20,7 @@ module.exports.VERIFY = async (req, res, next) => {
     // Call next middleware function in chain
     next();
   } catch (err) {
+    console.log(err, "error jwt");
     // Handle different types of errors that may occur during verification
     if (err.name === "TokenExpiredError") {
       return res.send({
@@ -39,5 +40,3 @@ module.exports.VERIFY = async (req, res, next) => {
     });
   }
 };
-
-module.exports.expiresIn = 1000 * 60 * 100; // 1 Hour

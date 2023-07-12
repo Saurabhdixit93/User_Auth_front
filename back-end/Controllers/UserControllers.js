@@ -1,7 +1,6 @@
 const bcryptjs = require("bcryptjs");
 const UserModel = require("../Models/UserModel");
 const jwt = require("jsonwebtoken");
-const { expiresIn } = require("../Configration/Jwt_Auth");
 const secretKey = process.env.SECRETE_KEY;
 
 module.exports.CreteAccount = async (req, res) => {
@@ -14,25 +13,25 @@ module.exports.CreteAccount = async (req, res) => {
   if (!emailRegex.test(userEmail)) {
     return res.send({
       status: false,
-      messaage: "Enter Valid Email Please.",
+      message: "Enter Valid Email Please.",
     });
   }
   if (!usernameRegex.test(userName)) {
     return res.send({
       status: false,
-      messaage: "Enter Valid UserName Please.",
+      message: "Enter Valid UserName Please.",
     });
   }
   if (!passwordRegex.test(userPassword)) {
     return res.send({
       status: false,
-      messaage: "Enter Valid Password with special charector and min 6 digit",
+      message: "Enter Valid Password with special charector and min 6 digit",
     });
   }
   if (userPassword !== confirmPassword) {
     return res.send({
       status: false,
-      messaage: "Password And Confirm Password Did not match",
+      message: "Password And Confirm Password Did not match",
     });
   }
   const email = userEmail.toLowerCase();
@@ -54,7 +53,6 @@ module.exports.CreteAccount = async (req, res) => {
     return res.send({
       status: true,
       message: "Account Created Successfully",
-      user: user,
     });
   } catch (error) {
     return res.send({ status: false, messaage: "Internal Server Error" });
@@ -90,11 +88,13 @@ module.exports.UserLoginJWT = async (req, res) => {
     }
 
     // Create a token for authentication with expires Time
-    const token = jwt.sign({ id: userExists._id }, secretKey, { expiresIn });
+    const token = jwt.sign({ id: userExists._id }, secretKey, {
+      expiresIn: "1d",
+    });
     return res.send({
       status: true,
-      message: "Login Successful, please use this token",
-      token: token,
+      message: "Login Successful",
+      token
     });
   } catch (error) {
     // Return a 500 status (Internal Server Error) if an error occurs
@@ -104,3 +104,5 @@ module.exports.UserLoginJWT = async (req, res) => {
     });
   }
 };
+
+module.exports.UserLogout = async (req, res) => {};

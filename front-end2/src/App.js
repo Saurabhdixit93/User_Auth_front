@@ -4,6 +4,8 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SignupPage from "./components/SignUp/Signup";
 import Navbar from "./components/Navbar/Navbar";
+import LoginPage from "./components/Login/Login";
+import ProtectedRoute from "./Context/ProtectedRoutes";
 function App() {
   return (
     <>
@@ -22,7 +24,7 @@ function App() {
         <Navbar />
         <BrowserRouter>
           <Routes>
-            {/* <Route path="/login" element={<AuthRedirect><Login /></AuthRedirect>} /> */}
+            <Route path="/login" element={<Login />} />
             <Route index path="/" element={<HomePage />} />
             <Route path="/register" element={<SignupPage />} />
           </Routes>
