@@ -11,7 +11,7 @@ import {
   showNotificationForRegisterError,
   showNotificationForRegisterSuccess,
 } from "../../Notification/Notify";
-const signupUrl = process.env.REACT_APP_SIGNUP_API;
+// const SignupUrl = process.env.REACT_APP_SIGNUP_API;
 const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -36,7 +36,7 @@ const SignupPage = () => {
   const HandleRegister = async (e) => {
     e.preventDefault();
     await axios
-      .post(signupUrl, formData)
+      .post("/user/signup", formData)
       .then((result) => {
         if (result.data.status === true) {
           showNotificationForRegisterSuccess(result.data.message);
@@ -46,6 +46,7 @@ const SignupPage = () => {
       })
       .catch((error) => {
         console.log("Error", error);
+        showNotificationForRegisterError(error.message);
       });
   };
   return (

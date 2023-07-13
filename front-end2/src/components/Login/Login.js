@@ -1,17 +1,17 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { FaLock, FaEye, FaEyeSlash, FaEnvelopeOpenText } from "react-icons/fa";
-import {
-  showNotificationForRegisterError,
-  showNotificationForRegisterSuccess,
-} from "../../Notification/Notify";
 import Cookies from "js-cookie";
-
+import {
+  showNotificationForLoginError,
+  showNotificationForLoginSuccess,
+} from "../../Notification/Notify";
 import { useNavigate } from "react-router-dom";
+// const LoginUrl = process.env.REACT_APP_LOGIN_API;
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const [token, setToken] = useState("");
   const [formData, setFormData] = useState({
     userEmail: "",
     userPassword: "",
@@ -28,28 +28,30 @@ const LoginPage = () => {
   const handleTogglePassword = () => {
     setShowPassword((prevState) => !prevState);
   };
+
+  axios.defaults.withCredentials = true;
   const HandleLogin = async (e) => {
     e.preventDefault();
     await axios
-      .post(
-        "https://5000-myproject9305-myproject-4b55vxxrgvx.ws-us101.gitpod.io/user/api/login",
-        formData
-      )
+      .post("/user/api/login", formData)
       .then((result) => {
         if (result.data.status === true) {
-          showNotificationForRegisterSuccess(result.data.message);
-          const { token } = result.data;
-          Cookies.set("token", token, { expires: 7 });
-          setToken(token);
-          return navigate("/");
+          showNotificationForLoginSuccess(result.data.message);
+          const token = result.data.token;
+          Cookies.set("token", token, { expires: 7 }); // set token as a cookie
+          // localStorage.setItem("token", result.data.token);
+          navigate("/");
+          window.location.reload();
+          return;
         } else {
-          showNotificationForRegisterError(result.data.message);
-          return navigate("/login");
+          showNotificationForLoginError(result.data.message);
+          return;
         }
       })
       .catch((error) => {
         console.log("error in login", error);
-        showNotificationForRegisterError(error.message);
+        showNotificationForLoginError(error.message);
+        return;
       });
   };
 

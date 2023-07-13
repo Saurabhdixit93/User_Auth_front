@@ -1,33 +1,49 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { getTokenCookie } from "../../Context/CookieGet";
+import {
+  showNotificationForLoginError,
+  showNotificationForLogoutSuccess,
+} from "../../Notification/Notify";
+import Cookies from "js-cookie";
 const HomePage = () => {
-  const user = {
-    // Example user details, replace with actual user data
-    username: "JohnDoe",
-    email: "johndoe@example.com",
-  };
+  // const user = localStorage.getItem("token");
+  const navigate = useNavigate();
+  const user = getTokenCookie();
+  let userName = ""; // Initialize with an empty string
+  let userEmail = "";
 
+  if (user) {
+    const tokenPayload = JSON.parse(atob(user.split(".")[1]));
+    userName = tokenPayload.userName; // Assign the value to userName
+    userEmail = tokenPayload.userEmail;
+  }
+
+  const handleLogout = async (e) => {
+    try {
+      if (user) {
+        Cookies.remove("token");
+        showNotificationForLogoutSuccess("Logout Successfull");
+        navigate("/");
+        window.location.reload();
+        return;
+      }
+    } catch (error) {
+      showNotificationForLoginError(error.message);
+      return;
+    }
+  };
   return (
     <>
       <div className="home-page">
         <h1>Welcome to the Homepage</h1>
-
-        {!user ? (
-          <div className="buttons-container">
-            <Link to="/signup" className="button signup-button">
-              Signup
-            </Link>
-            <Link to="/login" className="button login-button">
-              Login
-            </Link>
-          </div>
-        ) : (
+        {user && (
           <div className="user-details">
-            <p className="welcome-message">Welcome, {user.username}!</p>
-            <p className="email">Email: {user.email}</p>
-            <Link to="/logout" className="button logout-button">
+            <p className="welcome-message">Welcome {userName},</p>
+            <p className="email">Email: {userEmail}</p>
+            <button className="button logout-button" onClick={handleLogout}>
               Logout
-            </Link>
+            </button>
           </div>
         )}
       </div>

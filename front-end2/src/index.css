@@ -243,6 +243,7 @@
 
 .logout-button {
   background-color: #dc3545;
+  cursor: pointer;
 }
 
 .logout-button:hover {
