@@ -8,7 +8,7 @@ import {
 } from "../../Notification/Notify";
 import { useNavigate, Link } from "react-router-dom";
 // const LoginUrl = process.env.REACT_APP_LOGIN_API;
-
+import Loading from "../../Loader/loding";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
@@ -16,7 +16,7 @@ const LoginPage = () => {
     userEmail: "",
     userPassword: "",
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -32,10 +32,12 @@ const LoginPage = () => {
   axios.defaults.withCredentials = true;
   const HandleLogin = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     await axios
       .post("/user/api/login", formData)
       .then((result) => {
         if (result.data.status === true) {
+          setIsSubmitting(false);
           showNotificationForLoginSuccess(result.data.message);
           const token = result.data.token;
           Cookies.set("token", token, { expires: 7 }); // set token as a cookie
@@ -44,13 +46,22 @@ const LoginPage = () => {
           window.location.reload();
           return;
         } else {
+          setIsSubmitting(false);
           showNotificationForLoginError(result.data.message);
+          setFormData({
+            userEmail: "",
+            userPassword: "",
+          });
           return;
         }
       })
       .catch((error) => {
-        console.log("error in login", error);
+        setIsSubmitting(false);
         showNotificationForLoginError(error.message);
+        setFormData({
+          userEmail: "",
+          userPassword: "",
+        });
         return;
       });
   };
@@ -95,7 +106,13 @@ const LoginPage = () => {
                 </span>
               </div>
             </div>
-            <button type="submit">Login</button>
+            {isSubmitting ? (
+              <div className="loader">
+                <Loading />
+              </div>
+            ) : (
+              <button type="submit">Login</button>
+            )}
           </form>
           <div className="line">
             {" "}

@@ -6,22 +6,24 @@ import {
   FaLock,
   FaEnvelopeOpenText,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   showNotificationForRegisterError,
   showNotificationForRegisterSuccess,
 } from "../../Notification/Notify";
+import Loading from "../../Loader/loding";
 // const SignupUrl = process.env.REACT_APP_SIGNUP_API;
 const SignupPage = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    username: "",
+    userName: "",
     userEmail: "",
     userPassword: "",
     confirmPassword: "",
   });
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevState) => ({
@@ -36,18 +38,37 @@ const SignupPage = () => {
 
   const HandleRegister = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     await axios
       .post("/user/signup", formData)
       .then((result) => {
         if (result.data.status === true) {
+          setIsSubmitting(false);
           showNotificationForRegisterSuccess(result.data.message);
+          navigate("/login");
+          return;
         } else {
+          setIsSubmitting(false);
           showNotificationForRegisterError(result.data.message);
+          setFormData({
+            userName: "",
+            userEmail: "",
+            userPassword: "",
+            confirmPassword: "",
+          });
+          return;
         }
       })
       .catch((error) => {
-        console.log("Error", error);
+        setIsSubmitting(false);
         showNotificationForRegisterError(error.message);
+        setFormData({
+          userName: "",
+          userEmail: "",
+          userPassword: "",
+          confirmPassword: "",
+        });
+        return;
       });
   };
   return (
@@ -57,14 +78,14 @@ const SignupPage = () => {
           <h2>Create an Account</h2>
           <form onSubmit={HandleRegister}>
             <div className="form-group">
-              <label htmlFor="username">
+              <label htmlFor="userName">
                 <FaUser /> Username
               </label>
               <input
                 type="text"
-                id="username"
-                name="username"
-                value={formData.username}
+                id="userName"
+                name="userName"
+                value={formData.userName}
                 onChange={handleInputChange}
                 required
               />
@@ -120,14 +141,23 @@ const SignupPage = () => {
                 </span>
               </div>
             </div>
-            <button type="submit">Sign Up</button>
+            {isSubmitting ? (
+              <div className="loader">
+                <Loading />
+              </div>
+            ) : (
+              <button type="submit">Register</button>
+            )}
           </form>
           <div className="line">
             {" "}
             <span>Or</span>
           </div>
           <div className="form-group">
-            <Link className="ToPath" to={"/login"}> Login</Link>
+            <Link className="ToPath" to={"/login"}>
+              {" "}
+              Login
+            </Link>
           </div>
         </div>
       </div>

@@ -16,7 +16,7 @@ module.exports.CreteAccount = async (req, res) => {
       message: "Enter Valid Email Please.",
     });
   }
-  if (!usernameRegex.test(userName)) {
+  if (!userName && !usernameRegex.test(userName)) {
     return res.json({
       status: false,
       message: "Enter Valid UserName Please.",
@@ -36,7 +36,7 @@ module.exports.CreteAccount = async (req, res) => {
   }
   const email = userEmail.toLowerCase();
   try {
-    var user = await UserModel.findOne({ userEmail: email });
+    const user = await UserModel.findOne({ userEmail: email });
     if (user) {
       return res.json({
         status: false,
@@ -44,12 +44,12 @@ module.exports.CreteAccount = async (req, res) => {
       });
     }
     const hashedPassword = await bcryptjs.hash(userPassword, 15);
-    user = await new UserModel({
+    const newUser = await new UserModel({
       userEmail: email,
       userPassword: hashedPassword,
       userName: userName,
     });
-    await user.save();
+    await newUser.save();
     return res.json({
       status: true,
       message: "Account Created Successfully",
@@ -75,6 +75,7 @@ module.exports.UserLoginJWT = async (req, res) => {
           "User Email Not Found or User Does Not Exist,Please Create New Account",
       });
     }
+    const username = userExists.userName;
     // Verify the password
     const passwordMatch = await bcryptjs.compare(
       userPassword,
@@ -91,7 +92,7 @@ module.exports.UserLoginJWT = async (req, res) => {
     const token = await jwt.sign(
       {
         userId: userExists._id,
-        userName: userExists.userName,
+        userName: username,
         userEmail: userExists.userEmail,
       },
       secretKey,

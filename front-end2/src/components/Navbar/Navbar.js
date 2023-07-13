@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { getTokenCookie } from "../../Context/CookieGet";
 const Navbar = () => {
+  const user = getTokenCookie();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -29,7 +30,7 @@ const Navbar = () => {
           <menu
             className={`navigation ${isMenuOpen ? "navigation--mobile" : ""}`}
           >
-            <li>Platform</li>
+            {user && <li> Platform</li>}
             <li>Blog</li>
             <li>About</li>
             <li>Contact Us</li>

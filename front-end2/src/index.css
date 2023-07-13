@@ -383,9 +383,15 @@ button[type='submit']:hover {
   border-radius: 4px;
   cursor: pointer;
 }
-.ToPath:hover{
+
+.ToPath:hover {
   background-color: #0011ff;
 }
+
+.Link {
+  text-decoration: none;
+}
+
 /* Apply custom scrollbar to the root element */
 html {
   scrollbar-width: thin;
@@ -406,4 +412,56 @@ html::-webkit-scrollbar-thumb {
 
 html::-webkit-scrollbar-thumb:hover {
   background-color: #a3a3a3;
+}
+
+.loader {
+  background-color: #e9e4e4;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.container {
+  display: flex;
+  column-gap: 20px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.container .dot {
+  width: 15px;
+  height: 15px;
+  background-color: #000000;
+  border-radius: 50%;
+  animation: loading 1s infinite alternate;
+}
+
+.container .dot:nth-child(1) {
+  background-color: #4285f4;
+  animation-delay: -0.25s;
+}
+
+.container .dot:nth-child(2) {
+  background-color: #ea4335;
+  animation-delay: -0.5s;
+}
+
+.container .dot:nth-child(3) {
+  background-color: #fbbc05;
+  animation-delay: -0.75s;
+}
+
+.container .dot:nth-child(4) {
+  background-color: #34a853;
+  animation-delay: -1s;
+}
+
+@keyframes loading {
+  0% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(3px);
+  }
 }

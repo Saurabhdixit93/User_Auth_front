@@ -17,6 +17,7 @@ const HomePage = () => {
     const tokenPayload = JSON.parse(atob(user.split(".")[1]));
     userName = tokenPayload.userName; // Assign the value to userName
     userEmail = tokenPayload.userEmail;
+    console.log(userName, "usernamne");
   }
 
   const handleLogout = async (e) => {
