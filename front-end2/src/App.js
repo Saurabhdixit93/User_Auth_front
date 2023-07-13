@@ -8,7 +8,6 @@ import Navbar from "./components/Navbar/Navbar";
 import LoginPage from "./components/Login/Login";
 import axios from "axios";
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
-
 axios.defaults.withCredentials = true;
 function App() {
   // const user = localStorage.getItem("token");
