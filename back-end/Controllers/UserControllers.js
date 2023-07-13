@@ -11,25 +11,25 @@ module.exports.CreteAccount = async (req, res) => {
   const passwordRegex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
   if (!emailRegex.test(userEmail)) {
-    return res.send({
+    return res.json({
       status: false,
       message: "Enter Valid Email Please.",
     });
   }
   if (!usernameRegex.test(userName)) {
-    return res.send({
+    return res.json({
       status: false,
       message: "Enter Valid UserName Please.",
     });
   }
   if (!passwordRegex.test(userPassword)) {
-    return res.send({
+    return res.json({
       status: false,
       message: "Enter Valid Password with special charector and min 6 digit",
     });
   }
   if (userPassword !== confirmPassword) {
-    return res.send({
+    return res.json({
       status: false,
       message: "Password And Confirm Password Did not match",
     });
@@ -38,7 +38,7 @@ module.exports.CreteAccount = async (req, res) => {
   try {
     var user = await UserModel.findOne({ userEmail: email });
     if (user) {
-      return res.send({
+      return res.json({
         status: false,
         message: "User Already exists with this email",
       });
@@ -50,12 +50,12 @@ module.exports.CreteAccount = async (req, res) => {
       userName: userName,
     });
     await user.save();
-    return res.send({
+    return res.json({
       status: true,
       message: "Account Created Successfully",
     });
   } catch (error) {
-    return res.send({ status: false, messaage: "Internal Server Error" });
+    return res.json({ status: false, messaage: "Internal Server Error" });
   }
 };
 
@@ -69,7 +69,7 @@ module.exports.UserLoginJWT = async (req, res) => {
     // Check if the user exists
     const userExists = await UserModel.findOne({ userEmail: validEmail });
     if (!userExists) {
-      return res.send({
+      return res.json({
         status: false,
         message:
           "User Email Not Found or User Does Not Exist,Please Create New Account",
@@ -81,28 +81,36 @@ module.exports.UserLoginJWT = async (req, res) => {
       userExists.userPassword
     );
     if (!passwordMatch) {
-      return res.send({
+      return res.json({
         status: false,
         message: "Incorrect Password Try Again !",
       });
     }
 
     // Create a token for authentication with expires Time
-    const token = jwt.sign({ id: userExists._id }, secretKey, {
-      expiresIn: "1d",
-    });
-    return res.send({
+    const token = await jwt.sign(
+      {
+        userId: userExists._id,
+        userName: userExists.userName,
+        userEmail: userExists.userEmail,
+      },
+      secretKey,
+      {
+        expiresIn: "1d",
+      }
+    );
+    res.cookie("token", token);
+    return res.json({
       status: true,
-      message: "Login Successful",
-      token
+      message: "Logged in successfull",
+      token: token,
+      userDetails: userExists,
     });
   } catch (error) {
     // Return a 500 status (Internal Server Error) if an error occurs
-    return res.send({
+    return res.json({
       status: false,
       message: `Error In Login User Account: ${error.message}`,
     });
   }
 };
-
-module.exports.UserLogout = async (req, res) => {};
