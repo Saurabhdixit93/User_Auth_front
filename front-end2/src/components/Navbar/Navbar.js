@@ -4,6 +4,14 @@ import { faBars, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { getTokenCookie } from "../../Context/CookieGet";
 const Navbar = () => {
   const user = getTokenCookie();
+  let userName = ""; // Initialize with an empty string
+  let userEmail = "";
+  if (user) {
+    const tokenPayload = JSON.parse(atob(user.split(".")[1]));
+    userName = tokenPayload.userName; // Assign the value to userName
+    userEmail = tokenPayload.userEmail;
+  }
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,8 +38,12 @@ const Navbar = () => {
           <menu
             className={`navigation ${isMenuOpen ? "navigation--mobile" : ""}`}
           >
-            {user && <li> Platform</li>}
-            <li>Blog</li>
+            {user && (
+              <>
+                <li>{userName}</li>
+                <li>{userEmail}</li>
+              </>
+            )}
             <li>About</li>
             <li>Contact Us</li>
           </menu>
