@@ -342,3 +342,68 @@ button[type='submit'] {
 button[type='submit']:hover {
   background-color: #0056b3;
 }
+
+.line {
+  display: flex;
+  align-items: center;
+  color: #000000;
+  margin: 20px 0;
+}
+
+.line::before,
+.line::after {
+  content: "";
+  flex-grow: 1;
+  height: 1px;
+  background-color: #000000;
+}
+
+.line::before {
+  margin-right: 10px;
+}
+
+.line::after {
+  margin-left: 10px;
+}
+
+.line span {
+  padding: 0 10px;
+  font-weight: bold;
+}
+
+.ToPath {
+  text-decoration: none;
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 10px;
+  background-color: #3813bd;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.ToPath:hover{
+  background-color: #0011ff;
+}
+/* Apply custom scrollbar to the root element */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #e2c6c6 #f1f1f1;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #999;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #a3a3a3;
+}

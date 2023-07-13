@@ -6,6 +6,7 @@ import {
   FaLock,
   FaEnvelopeOpenText,
 } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import {
   showNotificationForRegisterError,
@@ -121,6 +122,13 @@ const SignupPage = () => {
             </div>
             <button type="submit">Sign Up</button>
           </form>
+          <div className="line">
+            {" "}
+            <span>Or</span>
+          </div>
+          <div className="form-group">
+            <Link className="ToPath" to={"/login"}> Login</Link>
+          </div>
         </div>
       </div>
     </>

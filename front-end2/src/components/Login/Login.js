@@ -6,7 +6,7 @@ import {
   showNotificationForLoginError,
   showNotificationForLoginSuccess,
 } from "../../Notification/Notify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 // const LoginUrl = process.env.REACT_APP_LOGIN_API;
 
 const LoginPage = () => {
@@ -97,6 +97,16 @@ const LoginPage = () => {
             </div>
             <button type="submit">Login</button>
           </form>
+          <div className="line">
+            {" "}
+            <span>Or</span>
+          </div>
+          <div className="form-group">
+            <Link className="ToPath" to={"/register"}>
+              {" "}
+              Register
+            </Link>
+          </div>
         </div>
       </div>
     </>
